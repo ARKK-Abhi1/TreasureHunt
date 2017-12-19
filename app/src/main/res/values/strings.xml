@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TreasureHunt</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="welcomeString">Welcome</string>
+    <string name="progigy">Prodigy 2018</string>
+    <string name="event">Treasure Hunt</string>
+    <string name="credentials">Verify your Credentials</string>
+    <string name="participation">Team Prodigy awaits your active participation.\nPlease verifiy yourself.</string>
+    <string name="request">Enter the code obtained</string>
+    <string name="team">Team | </string>
+    <string name="prompt">Code</string>
+    <string name="or">OR \"Scan\" the QR Code</string>
+    <string name="scan">Scan</string>
+</resources>
