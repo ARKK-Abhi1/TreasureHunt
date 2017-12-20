@@ -182,4 +182,9 @@ public class Questions_Activity extends AppCompatActivity {
     private boolean checkEnteredCode() {
         return enteredCode.equals(questions[qindex].answer);
     }
+
+    private void startResultsActivity(Intent i) {
+        Intent intent=i;
+        startActivity(i);
+    }
 }
