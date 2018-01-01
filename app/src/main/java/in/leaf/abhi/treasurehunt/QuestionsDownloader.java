@@ -19,7 +19,7 @@ class QuestionsDownloader extends AsyncTask<Object,Void,String> {
         Database db=(Database)params[0];
         QuestionDao qd=db.getQuestionDao();
         OkHttpClient client = new OkHttpClient();
-        Request request=new Request.Builder().url("http://192.168.43.169/data/fetchQuestions.php").build();
+        Request request=new Request.Builder().url("http://treasure-hunt.atwebpages.com/fetchQuestions.php").build();
         Response response;
         String data=null;
         int counter=0;

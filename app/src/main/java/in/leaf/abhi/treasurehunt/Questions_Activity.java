@@ -25,7 +25,7 @@ public class Questions_Activity extends AppCompatActivity {
     Question questions[];
     int qSet[];
     private int totalQuestions;
-    private final int AVAILABLE_QUESTIONS=10;
+    private int availableQuestions=10;
     private int qindex=-1,teamNo;
     private String enteredCode;
     private Database db;
@@ -57,12 +57,12 @@ public class Questions_Activity extends AppCompatActivity {
 
         /* Setting the team number and the progress */
         teamNoView.setText(String.valueOf("Team | "+teamNo));
-        progressView.setText("0/"+String.valueOf(AVAILABLE_QUESTIONS));
+        progressView.setText("0/"+String.valueOf(availableQuestions));
 
         rqg=new RandomQGenerator();
         // The function below will generate the random numbers
-        rqg.generate(totalQuestions,AVAILABLE_QUESTIONS,teamNo);
-        /* This getter function below will retrieve an array of size 'AVAILABLE_QUESTIONS'
+        rqg.generate(totalQuestions,availableQuestions,teamNo);
+        /* This getter function below will retrieve an array of size 'availableQuestions'
            containing the randomly generated questions
          */
         qSet=rqg.getqSet();
@@ -78,7 +78,7 @@ public class Questions_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    if(qindex==AVAILABLE_QUESTIONS-1) {
+                    if(qindex==availableQuestions-1) {
                         //start new activity showing the timings and other results
                     }
                     else {
@@ -130,7 +130,7 @@ public class Questions_Activity extends AppCompatActivity {
         if(intentResult!=null) {
             enteredCode=intentResult.getContents();
             if (enteredCode!=null&&checkEnteredCode()) {
-                if(qindex==AVAILABLE_QUESTIONS-1) {
+                if(qindex==availableQuestions-1) {
                     //start new activity showing the timings and other results
                 }
                 else {
@@ -150,13 +150,15 @@ public class Questions_Activity extends AppCompatActivity {
 
     private void setNextQuestion() {
         try {
-            progressBar.setProgress((qindex + 1) * 100 / AVAILABLE_QUESTIONS);
-            progressView.setText(String.valueOf(qindex+1)+"/"+String.valueOf(AVAILABLE_QUESTIONS));
+            progressBar.setProgress((qindex + 1) * 100 / availableQuestions);
+            progressView.setText(String.valueOf(qindex+1)+"/"+String.valueOf(availableQuestions));
             qindex++;
             codeEntery.setText("");
             questionView.setText(questions[qindex].question+"   "+questions[qindex].answer);
         }catch(Exception e) {
             System.out.println("Unable to set next Question");
+            if(availableQuestions==0)
+                questionView.setText("No questions in the database");
             questionView.setText("Unable to set next Question");
             e.printStackTrace();
         }
@@ -173,6 +175,9 @@ public class Questions_Activity extends AppCompatActivity {
     private void downloadQuestions() {
         try {
             totalQuestions=Integer.parseInt(qD.execute(db).get());
+            System.out.println("total questions "+totalQuestions);
+            if(availableQuestions>totalQuestions)
+                availableQuestions=totalQuestions;
         }catch(Exception e) {
             questionView.setText("null "+teamNo);
             e.printStackTrace();

@@ -13,7 +13,7 @@ public class QuestionsFetcher extends AsyncTask<Object,Void,Question[]> {
         int availableQuestions=qSet.length;
         Question[] questions=new Question[availableQuestions];
         QuestionDao qD=db.getQuestionDao();
-        for(int i=0;i<qSet.length;i++) {
+        for(int i=0;i<availableQuestions;i++) {
             try {
                 questions[i] = qD.getQuestion(qSet[i]);
             }catch(Exception e) {

@@ -18,10 +18,10 @@ class ParticipantVerifier extends AsyncTask<String,Void,String> {
         email=args[0];
         password=args[1];
         OkHttpClient client=new OkHttpClient();
-        Request request=new Request.Builder().url("http://192.168.43.169/data/fetchParticipants.php").build();
+        Request request=new Request.Builder().url("http://treasure-hunt.atwebpages.com/fetchParticipants.php").build();
         Response response;
-        String data=null;
-        int teamNo=0;
+        String data;
+        int teamNo;
         try {
             response = client.newCall(request).execute();
             data=response.body().string();
@@ -47,7 +47,7 @@ class ParticipantVerifier extends AsyncTask<String,Void,String> {
                     if((s.next()).equals("0")) {
                         teamNo=max+1;
                         System.out.println("email : "+email);
-                        Request setRequest=new Request.Builder().url("http://192.168.43.169/data/setLoggedIn.php?Email='"+email+"'&Team_no='"+
+                        Request setRequest=new Request.Builder().url("http://treasure-hunt.atwebpages.com/setLoggedIn.php?Email='"+email+"'&Team_no='"+
                                                                       String.valueOf(teamNo)+"'").build();
                         Response response2=client.newCall(setRequest).execute();
                         System.out.println(response2);
