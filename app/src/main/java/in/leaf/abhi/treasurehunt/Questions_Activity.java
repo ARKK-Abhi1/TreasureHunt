@@ -150,9 +150,9 @@ public class Questions_Activity extends AppCompatActivity {
 
     private void setNextQuestion() {
         try {
+            qindex++;
             progressBar.setProgress((qindex + 1) * 100 / availableQuestions);
             progressView.setText(String.valueOf(qindex+1)+"/"+String.valueOf(availableQuestions));
-            qindex++;
             codeEntery.setText("");
             questionView.setText(questions[qindex].question+"   "+questions[qindex].answer);
         }catch(Exception e) {
