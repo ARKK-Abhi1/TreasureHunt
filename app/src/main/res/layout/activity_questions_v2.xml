@@ -57,8 +57,8 @@
                 android:id="@+id/promptView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 android:padding="8dp"
+                android:text="@string/request"
                 android:textAlignment="viewStart"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="TextView"
+                android:text="@string/or"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="@string/or" />
