@@ -23,7 +23,7 @@ public class Questions_Activity extends AppCompatActivity {
     Button submitB,scanB;
     ProgressBar progressBar;
     Question questions[];
-    int qSet[];
+    int qSet[];// This array will hold the random sequence of questions
     private int totalQuestions;
     private int availableQuestions=10;
     private int qindex=-1,teamNo;
@@ -61,7 +61,10 @@ public class Questions_Activity extends AppCompatActivity {
 
         rqg=new RandomQGenerator();
         // The function below will generate the random numbers
-        rqg.generate(totalQuestions,availableQuestions,teamNo);
+        /* the totalQuestions below are subtracted by 1 because we have to fix the
+           last question for every team and the last question in the db will be that fixed question
+         */
+        rqg.generate(totalQuestions-1,availableQuestions);
         /* This getter function below will retrieve an array of size 'availableQuestions'
            containing the randomly generated questions
          */
@@ -151,6 +154,7 @@ public class Questions_Activity extends AppCompatActivity {
     private void setNextQuestion() {
         try {
             qindex++;
+            System.out.println("qindex : "+qindex);
             progressBar.setProgress((qindex + 1) * 100 / availableQuestions);
             progressView.setText(String.valueOf(qindex+1)+"/"+String.valueOf(availableQuestions));
             codeEntery.setText("");
@@ -166,7 +170,7 @@ public class Questions_Activity extends AppCompatActivity {
     private void fetchAvailableQuestions() {
         try {
             /* questions is an array of type 'Question' */
-            questions = qF.execute(db, qSet).get();
+            questions = qF.execute(db, qSet,totalQuestions).get();
         }catch(Exception e) {
             System.out.println("Exception during fetching questions in MainActivity");
         }

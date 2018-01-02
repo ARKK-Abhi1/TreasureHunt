@@ -47,8 +47,8 @@ class RandomQGenerator {
         }
         return stored;
     }
-    void generate(int bound,int size,int seed) {  //bound must be greater than size
-        Random r = new Random(seed);
+    void generate(int bound,int size) {  //bound must be greater than size
+        Random r = new Random();
         this.size=size;
         qSet=new int[size];
         if(bound>0)
