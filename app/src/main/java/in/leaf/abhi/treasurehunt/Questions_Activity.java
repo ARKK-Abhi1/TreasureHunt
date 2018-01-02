@@ -36,7 +36,7 @@ public class Questions_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions_);
+        setContentView(R.layout.activity_questions_v2);
         Bundle bundle=getIntent().getExtras();
         teamNo=bundle.getInt("teamNo"); // retrieving the team no sent by the login activity
         // Initializing all global variables here
