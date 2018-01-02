@@ -14,4 +14,7 @@
     <string name="prompt">Code</string>
     <string name="or">OR \"Scan\" the QR Code</string>
     <string name="scan">Scan</string>
+    <string name="login">Login</string>
+    <string name="email">E-mail</string>
+    <string name="password">password</string>
 </resources>

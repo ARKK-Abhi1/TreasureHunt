@@ -56,7 +56,6 @@
         android:text="@string/credentials"
         android:textAlignment="viewStart"
         android:textAllCaps="true"
-        android:textColor="?attr/textColorAlertDialogListItem"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.07"
