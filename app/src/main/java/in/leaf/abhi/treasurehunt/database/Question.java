@@ -1,6 +1,5 @@
-package in.leaf.abhi.treasurehunt;
+package in.leaf.abhi.treasurehunt.database;
 
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -9,22 +8,22 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity(tableName = "Questions")
 public class Question {
-    Question(int q_no,String question,String answer) {
+    public Question(int q_no,String question,String answer) {
         this.q_no=q_no;
         this.question=question;
         this.answer=answer;
     }
     @PrimaryKey
-    int q_no;
+    public int q_no;
 
-    String question;
-    String answer;
+    public String question;
+    public String answer;
 
     @Override
     public boolean equals(Object o) {
         try {
             Question q= (Question)o;
-            if (q_no == q_no)
+            if (q.q_no == q_no)
                 if (question.equals(q.question))
                     if(answer.equals(q.answer))
                         return true;

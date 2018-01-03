@@ -1,4 +1,4 @@
-package in.leaf.abhi.treasurehunt;
+package in.leaf.abhi.treasurehunt.database;
 
 import android.arch.persistence.room.RoomDatabase;
 
