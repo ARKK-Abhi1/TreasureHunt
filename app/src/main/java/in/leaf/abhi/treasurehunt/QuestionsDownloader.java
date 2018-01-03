@@ -1,13 +1,15 @@
 package in.leaf.abhi.treasurehunt;
 
-import android.arch.persistence.room.Room;
-import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
-import android.content.Context;
+
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import java.util.Scanner;
+
+import in.leaf.abhi.treasurehunt.database.Database;
+import in.leaf.abhi.treasurehunt.database.Question;
+import in.leaf.abhi.treasurehunt.database.QuestionDao;
 
 /**
  * Created by 500060150 on 16-12-2017.

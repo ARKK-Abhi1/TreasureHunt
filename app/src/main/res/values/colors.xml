@@ -5,4 +5,5 @@
     <color name="colorAccent">#0af312</color>
     <color name="questionViewColor">#8eec79</color>
     <color name="black_overlay">#66121212</color>
+    <color name="timerColor">#f40606</color>
 </resources>

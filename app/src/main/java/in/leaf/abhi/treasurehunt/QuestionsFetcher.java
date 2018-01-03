@@ -2,6 +2,10 @@ package in.leaf.abhi.treasurehunt;
 
 import android.os.AsyncTask;
 
+import in.leaf.abhi.treasurehunt.database.Database;
+import in.leaf.abhi.treasurehunt.database.Question;
+import in.leaf.abhi.treasurehunt.database.QuestionDao;
+
 /**
  * Created by 500060150 on 16-12-2017.
  */

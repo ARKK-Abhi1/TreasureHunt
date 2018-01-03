@@ -3,6 +3,7 @@ package in.leaf.abhi.treasurehunt;
 import android.Manifest;
 import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,12 @@ import android.widget.EditText;
 import android.content.Intent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import android.widget.Chronometer;
+
+import java.util.concurrent.TimeUnit;
+
+import in.leaf.abhi.treasurehunt.database.Database;
+import in.leaf.abhi.treasurehunt.database.Question;
 
 public class Questions_Activity extends AppCompatActivity {
     static final int CAMERA_PERMISSION_REQUEST_CODE=1;
@@ -32,6 +39,7 @@ public class Questions_Activity extends AppCompatActivity {
     private QuestionsFetcher qF;
     private QuestionsDownloader qD;
     private RandomQGenerator rqg;
+    private Chronometer crm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,7 @@ public class Questions_Activity extends AppCompatActivity {
         db= Room.databaseBuilder(Questions_Activity.this,Database.class,"AppDatabase").build();
         qD=new QuestionsDownloader();//This will download questions from the server database;
         qF=new QuestionsFetcher();
+        crm=(Chronometer)findViewById(R.id.chronometer);
         //-----------------------------------------------------------------------------------------------
         downloadQuestions(); // This function will download the questions from the server
         // and save them in the app's database
@@ -74,6 +83,8 @@ public class Questions_Activity extends AppCompatActivity {
            those particular questions from the database;
          */
         fetchAvailableQuestions();
+        /* Starting the timer here*/
+        crm.start();
         setNextQuestion(); // Set the first question for the participant
 
         System.out.println("leaf");
@@ -81,16 +92,21 @@ public class Questions_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    if(qindex==availableQuestions-1) {
-                        //start new activity showing the timings and other results
+                    enteredCode = codeEntery.getText().toString();
+                    if(checkEnteredCode()) {
+                        if(qindex==availableQuestions-1) {
+                            crm.stop();
+                            long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
+                            Intent i = new Intent(Questions_Activity.this, Results_Activity.class);
+                            i.putExtra("timeTaken",timeTaken);
+                            startResultsActivity(i);
+                        }
+                        else {
+                            setNextQuestion();
+                        }
                     }
                     else {
-                        enteredCode = codeEntery.getText().toString();
-                        if (checkEnteredCode())
-                            setNextQuestion();
-                        else {
-                            // Display a dialog box showing warning
-                        }
+                        //Display warning
                     }
                 }catch (Exception e) {
                     e.printStackTrace();
@@ -167,6 +183,7 @@ public class Questions_Activity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void fetchAvailableQuestions() {
         try {
             /* questions is an array of type 'Question' */
@@ -195,5 +212,6 @@ public class Questions_Activity extends AppCompatActivity {
     private void startResultsActivity(Intent i) {
         Intent intent=i;
         startActivity(i);
+        Questions_Activity.this.finish();
     }
 }
