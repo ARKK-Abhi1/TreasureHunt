@@ -16,6 +16,7 @@ public class BackgroundThread implements Runnable {
 
     synchronized public void stop() {
         alive=false;
+        notify();
     }
 
     private void suspend() {
