@@ -16,12 +16,16 @@ import android.widget.EditText;
 import android.content.Intent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import android.widget.Chronometer;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import in.leaf.abhi.treasurehunt.database.Database;
-import in.leaf.abhi.treasurehunt.database.Question;
+import in.leaf.abhi.treasurehunt.database.*;
 
 public class Questions_Activity extends AppCompatActivity {
     static final int CAMERA_PERMISSION_REQUEST_CODE=1;
@@ -83,9 +87,21 @@ public class Questions_Activity extends AppCompatActivity {
            those particular questions from the database;
          */
         fetchAvailableQuestions();
-        /* Starting the timer here*/
+        /* Setting the Listener for the chronometer tick */
+        crm.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                if(SystemClock.elapsedRealtime()-crm.getBase()==TimeUnit.MILLISECONDS.convert(10, TimeUnit.SECONDS)) {
+                    Toast t=new Toast(Questions_Activity.this);
+                    t.setText("Time is Up!");
+                    startResultsActivity();
+                }
+            }
+        });
+        /* Setting the first question for the participant */
+        setNextQuestion();
+        /* Starting the timer here after setting the first question*/
         crm.start();
-        setNextQuestion(); // Set the first question for the participant
 
         System.out.println("leaf");
         submitB.setOnClickListener(new View.OnClickListener() {
@@ -95,11 +111,7 @@ public class Questions_Activity extends AppCompatActivity {
                     enteredCode = codeEntery.getText().toString();
                     if(checkEnteredCode()) {
                         if(qindex==availableQuestions-1) {
-                            crm.stop();
-                            long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
-                            Intent i = new Intent(Questions_Activity.this, Results_Activity.class);
-                            i.putExtra("timeTaken",timeTaken);
-                            startResultsActivity(i);
+                            startResultsActivity();
                         }
                         else {
                             setNextQuestion();
@@ -127,6 +139,8 @@ public class Questions_Activity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
     @Override
@@ -150,7 +164,7 @@ public class Questions_Activity extends AppCompatActivity {
             enteredCode=intentResult.getContents();
             if (enteredCode!=null&&checkEnteredCode()) {
                 if(qindex==availableQuestions-1) {
-                    //start new activity showing the timings and other results
+                    startResultsActivity();
                 }
                 else {
                     setNextQuestion();
@@ -209,9 +223,24 @@ public class Questions_Activity extends AppCompatActivity {
         return enteredCode.equals(questions[qindex].answer);
     }
 
-    private void startResultsActivity(Intent i) {
-        Intent intent=i;
+    private void startResultsActivity() {
+        crm.stop();
+        final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
+        Intent i = new Intent(Questions_Activity.this, Results_Activity.class);
+        i.putExtra("timeTaken",timeTaken);
         startActivity(i);
+        /* initiate a new backgrround thread to save results in app database */
+        BackgroundThread bgt=new BackgroundThread(new Runnable(){
+            @Override
+            public void run() {
+                ResultsDao rD=db.getResultsDao();
+                if(rD.getResults()==null)
+                    rD.insertResults(new Results(teamNo,timeTaken));
+                else
+                    rD.updateResults(new Results(teamNo,timeTaken));
+            }
+        });
+        bgt.stop();
         Questions_Activity.this.finish();
     }
 }
