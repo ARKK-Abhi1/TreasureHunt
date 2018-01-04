@@ -240,6 +240,7 @@ public class Questions_Activity extends AppCompatActivity {
                     rD.updateResults(new Results(teamNo,timeTaken));
             }
         });
+        bgt.execute(null);
         bgt.stop();
         Questions_Activity.this.finish();
     }
