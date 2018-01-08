@@ -25,10 +25,42 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/msgView"
                 android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:text="TextView" />
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/congrats"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/timeView"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:padding="8dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/completedView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/completedView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/returnback"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
