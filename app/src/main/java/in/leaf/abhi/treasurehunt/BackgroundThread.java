@@ -8,23 +8,11 @@ final public class BackgroundThread implements Runnable {
     private Runnable task;
     private boolean suspended;
     private boolean alive;
-
-    public BackgroundThread(Runnable taks) {
-        this.task=taks;
+    private static BackgroundThread thisReference;
+    private BackgroundThread() {
         new Thread(this).start();
-    }
-
-    public void stop() {
-        alive=false;
-    }
-
-    private void suspend() {
-        suspended=true;
-    }
-
-    synchronized private void resume() {
-        suspended=false;
-        notifyAll();
+        thisReference=this;
+        alive=true;
     }
 
     synchronized public void execute(Runnable task) throws IllegalStateException {
@@ -32,7 +20,7 @@ final public class BackgroundThread implements Runnable {
            running the run() method to wait(after notify() in resume() is called
            until the current task is finished
          */
-        while(task!=null) {
+        while(this.task!=null) {
             try {
                 wait();
             }catch (InterruptedException iE) {
@@ -52,9 +40,27 @@ final public class BackgroundThread implements Runnable {
         resume();
     }
 
+    public static BackgroundThread getBackgroundThread() {
+        if(thisReference!=null) {
+            System.out.println("this reference");
+            return thisReference;
+        }
+        return new BackgroundThread();
+    }
+
+    public static BackgroundThread getBackgroundThread(boolean newThread) {
+        if(newThread||thisReference==null)
+            return new BackgroundThread();
+        else
+            return thisReference;
+    }
+    synchronized private void resume() {
+        suspended=false;
+        notifyAll();
+    }
+
     @Override
     synchronized public void run() {
-        alive=true;
         while(alive) {
             while(suspended) {
                 try {
@@ -77,5 +83,13 @@ final public class BackgroundThread implements Runnable {
            threads will be dead-locked
         */
         notifyAll();
+    }
+
+    public void stop() {
+        alive=false;
+    }
+
+    private void suspend() {
+        suspended=true;
     }
 }
