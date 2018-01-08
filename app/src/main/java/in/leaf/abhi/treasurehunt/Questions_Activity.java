@@ -16,14 +16,8 @@ import android.widget.EditText;
 import android.content.Intent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import android.widget.Chronometer;
 import android.widget.Toast;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import in.leaf.abhi.treasurehunt.database.*;
 
@@ -36,7 +30,7 @@ public class Questions_Activity extends AppCompatActivity {
     Question questions[];
     int qSet[];// This array will hold the random sequence of questions
     private int totalQuestions;
-    private int availableQuestions=10;
+    private int availableQuestions=9;
     private int qindex=-1,teamNo;
     private String enteredCode;
     private Database db;
@@ -44,6 +38,7 @@ public class Questions_Activity extends AppCompatActivity {
     private QuestionsDownloader qD;
     private RandomQGenerator rqg;
     private Chronometer crm;
+    private BackgroundThread bgt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,20 +223,35 @@ public class Questions_Activity extends AppCompatActivity {
         final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
         Intent i = new Intent(Questions_Activity.this, Results_Activity.class);
         i.putExtra("timeTaken",timeTaken);
+        i.putExtra("questionsCompleted",qindex+1);
+        i.putExtra("availableQuestions",availableQuestions);
         startActivity(i);
         /* initiate a new backgrround thread to save results in app database */
-        BackgroundThread bgt=new BackgroundThread(new Runnable(){
+        Questions_Activity.this.finish();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        crm.stop();
+        final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
+        BackgroundThread bgt=BackgroundThread.getBackgroundThread();
+        bgt.execute(new Runnable(){
             @Override
             public void run() {
+                for(int i=1;i<=100000;i++)
+                    System.out.println("Leaf");
                 ResultsDao rD=db.getResultsDao();
+                System.out.println("ResultsDao obtained");
                 if(rD.getResults()==null)
-                    rD.insertResults(new Results(teamNo,timeTaken));
+                    rD.insertResults(new Results(teamNo,qindex+1,availableQuestions,timeTaken));
                 else
-                    rD.updateResults(new Results(teamNo,timeTaken));
+                    rD.updateResults(new Results(teamNo,qindex+1,availableQuestions,timeTaken));
             }
         });
-        bgt.execute(null);
-        bgt.stop();
-        Questions_Activity.this.finish();
+    }
+
+    @Override
+    public void onBackPressed(){
+
     }
 }

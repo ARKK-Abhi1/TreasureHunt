@@ -8,12 +8,16 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity
 public class Results {
-    public Results(int teamNo,long timeInMillis) {
+    public Results(int teamNo,int questionsCompleted,int availableQuestions,long timeInMillis) {
         this.teamNo=teamNo;
         this.timeInMillis=timeInMillis;
+        this.questionsCompleted=questionsCompleted;
+        this.availableQuestions=availableQuestions;
     }
     @PrimaryKey
     public int teamNo;
 
     public long timeInMillis;
+    public int questionsCompleted;
+    public int availableQuestions;
 }
