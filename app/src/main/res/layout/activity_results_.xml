@@ -28,25 +28,18 @@
                 android:id="@+id/msgView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_textview"
                 android:padding="8dp"
-                android:text="@string/congrats"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/timeView"
-                android:layout_width="match_parent"
-                android:layout_height="59dp"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/completedView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_textview"
                 android:padding="8dp"
                 android:text="TextView"
                 android:textAlignment="center"
@@ -54,10 +47,22 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/completedView"
+                android:id="@+id/timeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_textview"
+                android:padding="8dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_textview"
                 android:text="@string/returnback"
+                android:padding="8dp"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 

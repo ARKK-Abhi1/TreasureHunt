@@ -11,15 +11,16 @@ public class MainActivity extends AppCompatActivity {
     private final long SPLASH_DISPLAY_TIME=2000;
     Results results;
     long timeTaken;
+    Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db= Room.databaseBuilder(MainActivity.this,Database.class,"AppDatabase").build();
         BackgroundThread bgt=BackgroundThread.getBackgroundThread(true);
         bgt.execute(new Runnable() {
             @Override
             public void run() {
-                Database db= Room.databaseBuilder(MainActivity.this,Database.class,"AppDatabase").build();
                 ResultsDao rD=db.getResultsDao();
                 results=rD.getResults();
                 if(results==null)

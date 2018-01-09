@@ -91,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="@string/or"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="@string/or" />

@@ -1,10 +1,14 @@
 package in.leaf.abhi.treasurehunt;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +35,7 @@ public class Questions_Activity extends AppCompatActivity {
     int qSet[];// This array will hold the random sequence of questions
     private int totalQuestions;
     private int availableQuestions=9;
-    private int qindex=-1,teamNo;
+    private int qindex=-1,teamNo,completed;
     private String enteredCode;
     private Database db;
     private QuestionsFetcher qF;
@@ -215,7 +219,11 @@ public class Questions_Activity extends AppCompatActivity {
     }
 
     private boolean checkEnteredCode() {
-        return enteredCode.equals(questions[qindex].answer);
+        if(enteredCode.equals(questions[qindex].answer)) {
+            completed++;
+            return true;
+        }
+        return false;
     }
 
     private void startResultsActivity() {
@@ -223,7 +231,7 @@ public class Questions_Activity extends AppCompatActivity {
         final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
         Intent i = new Intent(Questions_Activity.this, Results_Activity.class);
         i.putExtra("timeTaken",timeTaken);
-        i.putExtra("questionsCompleted",qindex+1);
+        i.putExtra("questionsCompleted",completed);
         i.putExtra("availableQuestions",availableQuestions);
         startActivity(i);
         /* initiate a new backgrround thread to save results in app database */
@@ -243,15 +251,26 @@ public class Questions_Activity extends AppCompatActivity {
                 ResultsDao rD=db.getResultsDao();
                 System.out.println("ResultsDao obtained");
                 if(rD.getResults()==null)
-                    rD.insertResults(new Results(teamNo,qindex+1,availableQuestions,timeTaken));
+                    rD.insertResults(new Results(teamNo,completed,availableQuestions,timeTaken));
                 else
-                    rD.updateResults(new Results(teamNo,qindex+1,availableQuestions,timeTaken));
+                    rD.updateResults(new Results(teamNo,completed,availableQuestions,timeTaken));
             }
         });
     }
 
     @Override
     public void onBackPressed(){
-
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage(R.string.exit_alert);
+        DialogInterface.OnClickListener listener=new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==DialogInterface.BUTTON_POSITIVE)
+                    Questions_Activity.this.finish();
+            }
+        };
+        builder.setPositiveButton("Yes", listener);
+        builder.setNegativeButton("No", listener);
+        builder.show();
     }
 }

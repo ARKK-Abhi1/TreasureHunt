@@ -6,8 +6,6 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-import in.leaf.abhi.treasurehunt.database.ResultsDao;
-
 public class Results_Activity extends AppCompatActivity {
     TextView timeView;
     TextView completedView;

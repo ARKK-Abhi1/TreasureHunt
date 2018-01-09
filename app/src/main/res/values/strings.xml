@@ -21,4 +21,5 @@
     <string name="congrats">Congratulations!</string>
     <string name="returnback">Now Return to the Starting Point</string>
     <string name="failed">Oops! You did not find all the clues</string>
+    <string name="exit_alert">Are you sure your want to quit Treasure Hunt?</string>
 </resources>
