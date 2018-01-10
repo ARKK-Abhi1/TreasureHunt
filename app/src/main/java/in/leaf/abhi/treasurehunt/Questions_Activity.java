@@ -44,10 +44,81 @@ public class Questions_Activity extends AppCompatActivity {
     private Chronometer crm;
     private BackgroundThread bgt;
 
+
+    private boolean checkEnteredCode() {
+        if(enteredCode.equals(questions[qindex].answer)) {
+            completed++;
+            return true;
+        }
+        return false;
+    }
+
+    private void downloadQuestions() {
+        try {
+            totalQuestions=Integer.parseInt(qD.execute(db).get());
+            System.out.println("total questions "+totalQuestions);
+            if(availableQuestions>totalQuestions)
+                availableQuestions=totalQuestions;
+        }catch(Exception e) {
+            questionView.setText("null "+teamNo);
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchAvailableQuestions() {
+        try {
+            /* questions is an array of type 'Question' */
+            questions = qF.execute(db, qSet,totalQuestions).get();
+        }catch(Exception e) {
+            System.out.println("Exception during fetching questions in MainActivity");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent intent) {
+        IntentResult intentResult=IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+        if(intentResult!=null) {
+            enteredCode=intentResult.getContents();
+            if (enteredCode!=null&&checkEnteredCode()) {
+                if(qindex==availableQuestions-1) {
+                    startResultsActivity();
+                }
+                else {
+                    setNextQuestion();
+                }
+            }
+            else {
+                //show some error dialog
+                System.out.println("wrong code scanned");
+            }
+        }
+        else {
+            System.out.println("Wrong QR code scanned");
+        }
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage(R.string.exit_alert);
+        DialogInterface.OnClickListener listener=new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==DialogInterface.BUTTON_POSITIVE)
+                    Questions_Activity.this.finish();
+            }
+        };
+        builder.setPositiveButton("Yes", listener);
+        builder.setNegativeButton("No", listener);
+        builder.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions_v2);
+        getWindow().setBackgroundDrawableResource(R.drawable.questionsbg2);
+        setContentView(R.layout.activity_questions_v3);
         Bundle bundle=getIntent().getExtras();
         teamNo=bundle.getInt("teamNo"); // retrieving the team no sent by the login activity
         // Initializing all global variables here
@@ -143,6 +214,25 @@ public class Questions_Activity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        crm.stop();
+        final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
+        bgt=BackgroundThread.getBackgroundThread();
+        bgt.execute(new Runnable(){
+            @Override
+            public void run() {
+                ResultsDao rD=db.getResultsDao();
+                System.out.println("ResultsDao obtained");
+                if(rD.getResults()==null)
+                    rD.insertResults(new Results(teamNo,completed,availableQuestions,timeTaken));
+                else
+                    rD.updateResults(new Results(teamNo,completed,availableQuestions,timeTaken));
+            }
+        });
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults) {
         //here only one pemission is requested in the whole activity so there is no use for cheching the requestCode;
         // and the value of requestCode will be CAMERA_PERMISSON_REQUEST_CODE
@@ -152,30 +242,6 @@ public class Questions_Activity extends AppCompatActivity {
             System.out.println("Permission for camera use granted");
             IntentIntegrator iIntegrator = new IntentIntegrator(Questions_Activity.this);
             iIntegrator.initiateScan();
-        }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent intent) {
-        IntentResult intentResult=IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
-        if(intentResult!=null) {
-            enteredCode=intentResult.getContents();
-            if (enteredCode!=null&&checkEnteredCode()) {
-                if(qindex==availableQuestions-1) {
-                    startResultsActivity();
-                }
-                else {
-                    setNextQuestion();
-                }
-            }
-            else {
-                //show some error dialog
-                System.out.println("wrong code scanned");
-            }
-        }
-        else {
-            System.out.println("Wrong QR code scanned");
         }
 
     }
@@ -197,35 +263,6 @@ public class Questions_Activity extends AppCompatActivity {
         }
     }
 
-    private void fetchAvailableQuestions() {
-        try {
-            /* questions is an array of type 'Question' */
-            questions = qF.execute(db, qSet,totalQuestions).get();
-        }catch(Exception e) {
-            System.out.println("Exception during fetching questions in MainActivity");
-        }
-    }
-
-    private void downloadQuestions() {
-        try {
-            totalQuestions=Integer.parseInt(qD.execute(db).get());
-            System.out.println("total questions "+totalQuestions);
-            if(availableQuestions>totalQuestions)
-                availableQuestions=totalQuestions;
-        }catch(Exception e) {
-            questionView.setText("null "+teamNo);
-            e.printStackTrace();
-        }
-    }
-
-    private boolean checkEnteredCode() {
-        if(enteredCode.equals(questions[qindex].answer)) {
-            completed++;
-            return true;
-        }
-        return false;
-    }
-
     private void startResultsActivity() {
         crm.stop();
         final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
@@ -237,40 +274,5 @@ public class Questions_Activity extends AppCompatActivity {
         /* initiate a new backgrround thread to save results in app database */
         Questions_Activity.this.finish();
     }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        crm.stop();
-        final long timeTaken=SystemClock.elapsedRealtime()-crm.getBase();
-        BackgroundThread bgt=BackgroundThread.getBackgroundThread();
-        bgt.execute(new Runnable(){
-            @Override
-            public void run() {
-                for(int i=1;i<=100000;i++)
-                    System.out.println("Leaf");
-                ResultsDao rD=db.getResultsDao();
-                System.out.println("ResultsDao obtained");
-                if(rD.getResults()==null)
-                    rD.insertResults(new Results(teamNo,completed,availableQuestions,timeTaken));
-                else
-                    rD.updateResults(new Results(teamNo,completed,availableQuestions,timeTaken));
-            }
-        });
-    }
 
-    @Override
-    public void onBackPressed(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setMessage(R.string.exit_alert);
-        DialogInterface.OnClickListener listener=new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which==DialogInterface.BUTTON_POSITIVE)
-                    Questions_Activity.this.finish();
-            }
-        };
-        builder.setPositiveButton("Yes", listener);
-        builder.setNegativeButton("No", listener);
-        builder.show();
-    }
 }

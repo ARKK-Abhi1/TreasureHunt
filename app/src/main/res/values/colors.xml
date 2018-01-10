@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#0af312</color>
-    <color name="questionViewColor">#8eec79</color>
+    <color name="colorPrimary">#393939</color>
+    <color name="colorPrimaryDark">#252525</color>
+    <color name="colorAccent">#070707</color>
+    <color name="questionViewColor">#ffffffff</color>
     <color name="black_overlay">#66121212</color>
     <color name="timerColor">#f40606</color>
+    <color name="buttoncolor">#000000</color>
+    <color name="buttonstroke">#ffffff</color>
+    <color name="buttontextcolor">#ffffff</color>
 </resources>

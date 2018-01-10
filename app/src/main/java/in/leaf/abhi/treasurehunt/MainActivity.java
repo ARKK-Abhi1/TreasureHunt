@@ -8,14 +8,15 @@ import android.content.Intent;
 import in.leaf.abhi.treasurehunt.database.*;
 
 public class MainActivity extends AppCompatActivity {
-    private final long SPLASH_DISPLAY_TIME=2000;
+    private final long SPLASH_DISPLAY_TIME=3000;
     Results results;
     long timeTaken;
     Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        getWindow().setBackgroundDrawableResource(R.drawable.questionsbg2);
+        setContentView(R.layout.activity_main_v2);
         db= Room.databaseBuilder(MainActivity.this,Database.class,"AppDatabase").build();
         BackgroundThread bgt=BackgroundThread.getBackgroundThread(true);
         bgt.execute(new Runnable() {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                timeTaken=-1;
                 if(timeTaken==-1) {
                     Intent logAct = new Intent(MainActivity.this, LoginActivity.class);
                     MainActivity.this.startActivity(logAct);
