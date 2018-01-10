@@ -13,6 +13,7 @@ public class Results_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawableResource(R.drawable.treasurehuntbg);
         setContentView(R.layout.activity_results_);
         Bundle bundle = getIntent().getExtras();
         /* getting the information from bundle */

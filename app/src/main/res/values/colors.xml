@@ -9,4 +9,6 @@
     <color name="buttoncolor">#000000</color>
     <color name="buttonstroke">#ffffff</color>
     <color name="buttontextcolor">#ffffff</color>
+    <color name="textviewfg">#ffffff</color>
+    <color name="textviewstroke">#000000</color>
 </resources>

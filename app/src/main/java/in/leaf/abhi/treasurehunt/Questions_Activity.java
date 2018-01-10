@@ -2,13 +2,11 @@ package in.leaf.abhi.treasurehunt;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -85,14 +83,16 @@ public class Questions_Activity extends AppCompatActivity {
                 }
                 else {
                     setNextQuestion();
+                    Toast.makeText(this,"Code Successfully Scanned",Toast.LENGTH_SHORT).show();
                 }
             }
             else {
-                //show some error dialog
+                Toast.makeText(this,"Scan Unsucessful",Toast.LENGTH_SHORT).show();
                 System.out.println("wrong code scanned");
             }
         }
         else {
+            Toast.makeText(this,"No QR Code scanned",Toast.LENGTH_SHORT).show();
             System.out.println("Wrong QR code scanned");
         }
 
@@ -117,7 +117,7 @@ public class Questions_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawableResource(R.drawable.questionsbg2);
+        getWindow().setBackgroundDrawableResource(R.drawable.treasurehuntbg);
         setContentView(R.layout.activity_questions_v3);
         Bundle bundle=getIntent().getExtras();
         teamNo=bundle.getInt("teamNo"); // retrieving the team no sent by the login activity
@@ -185,10 +185,11 @@ public class Questions_Activity extends AppCompatActivity {
                         }
                         else {
                             setNextQuestion();
+                            Toast.makeText(Questions_Activity.this,"Valid Code. Next Question set",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
-                        //Display warning
+                        Toast.makeText(Questions_Activity.this,"Invalid Code",Toast.LENGTH_SHORT).show();
                     }
                 }catch (Exception e) {
                     e.printStackTrace();

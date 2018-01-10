@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawableResource(R.drawable.questionsbg2);
+        getWindow().setBackgroundDrawableResource(R.drawable.treasurehuntbg);
         setContentView(R.layout.activity_main_v2);
         db= Room.databaseBuilder(MainActivity.this,Database.class,"AppDatabase").build();
         BackgroundThread bgt=BackgroundThread.getBackgroundThread(true);
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                timeTaken=-1;
                 if(timeTaken==-1) {
                     Intent logAct = new Intent(MainActivity.this, LoginActivity.class);
                     MainActivity.this.startActivity(logAct);
