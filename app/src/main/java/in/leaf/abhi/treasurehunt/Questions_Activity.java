@@ -32,7 +32,7 @@ public class Questions_Activity extends AppCompatActivity {
     Question questions[];
     int qSet[];// This array will hold the random sequence of questions
     private int totalQuestions;
-    private int availableQuestions=9;
+    private int availableQuestions=10;
     private int qindex=-1,teamNo,completed;
     private String enteredCode;
     private Database db;
@@ -147,7 +147,7 @@ public class Questions_Activity extends AppCompatActivity {
         /* the totalQuestions below are subtracted by 1 because we have to fix the
            last question for every team and the last question in the db will be that fixed question
          */
-        rqg.generate(totalQuestions-1,availableQuestions);
+        rqg.generate(totalQuestions-1,availableQuestions,teamNo);
         /* This getter function below will retrieve an array of size 'availableQuestions'
            containing the randomly generated questions
          */

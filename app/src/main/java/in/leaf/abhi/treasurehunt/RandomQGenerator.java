@@ -9,10 +9,10 @@ class RandomQGenerator {
     private int size=9;
     private int qSet[];
     private int pointer=-1;
-    void generate(int bound,int size) {  //bound must be greater than size
+    void generate(int bound,int size,int seed) {  //bound must be greater than size
         if(bound<size)
             throw new IllegalStateException("bound must be greater than size");
-        Random r = new Random();
+        Random r = new Random(seed);
         this.size=size;
         qSet=new int[size];
         if(bound>0)
