@@ -87,13 +87,13 @@ public class Questions_Activity extends AppCompatActivity {
                 }
             }
             else {
-                Toast.makeText(this,"Scan Unsucessful",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Correct code was not Scanned",Toast.LENGTH_SHORT).show();
                 System.out.println("wrong code scanned");
             }
         }
         else {
-            Toast.makeText(this,"No QR Code scanned",Toast.LENGTH_SHORT).show();
-            System.out.println("Wrong QR code scanned");
+            Toast.makeText(this,"Error scanning code",Toast.LENGTH_SHORT).show();
+            System.out.println("Error");
         }
 
     }
