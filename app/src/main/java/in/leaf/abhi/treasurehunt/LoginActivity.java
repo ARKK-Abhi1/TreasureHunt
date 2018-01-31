@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.content.Intent;
 import java.util.Scanner;
@@ -15,54 +16,46 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordET;
     private Button loginB;
     private ParticipantVerifier pV;
+    private ProgressBar circularPb;
+
+    public void displayUserInputs(boolean display) {
+        if(display) {
+            emailET.setVisibility(View.VISIBLE);
+            passwordET.setVisibility(View.VISIBLE);
+            loginB.setVisibility(View.VISIBLE);
+        }
+        else {
+            emailET.setVisibility(View.GONE);
+            passwordET.setVisibility(View.GONE);
+            loginB.setVisibility(View.GONE);
+        }
+    }
+    public void displayWaitingIndicator(boolean display) {
+        if(display)
+            circularPb.setVisibility(View.VISIBLE);
+        else
+            circularPb.setVisibility(View.GONE);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_v3);
-        getWindow().setBackgroundDrawableResource(R.drawable.loginbg);
+        setContentView(R.layout.activity_login_v5);
+        getWindow().setBackgroundDrawableResource(R.drawable.tsbg);
         emailET=(EditText)findViewById(R.id.emailEditText);
         passwordET=(EditText)findViewById(R.id.passwordEditText);
         loginB=(Button)findViewById(R.id.loginButton);
+        circularPb=(ProgressBar)findViewById(R.id.circularProgressBar);
+        circularPb.setVisibility(View.GONE);
         loginB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email,password;
-                email=emailET.getText().toString();
-                password=passwordET.getText().toString();
-                pV=new ParticipantVerifier();// PrticipantVerifier
-                String result=null;
-                int response=-1;
-                String message=null;
-                try {
-                    result=pV.execute(email,password).get();//verifiying the credentials
-                    if(result==null){
-                        message="Please check your connection";
-                    }
-                    else {
-                        Scanner s=new Scanner(result);
-                        response=s.nextInt();
-                        switch(response) {
-                            case TRUE     : Intent i=new Intent(LoginActivity.this,Questions_Activity.class);
-                                            i.putExtra("teamNo",s.nextInt());
-                                            startActivity(i);
-                                            message="Verified";
-                                            LoginActivity.this.finish();
-                                            break;
-                            case FALSE    : message="Invalid Email or Password";
-                                            break;
-                            case LOGGEDIN : message="Already Logged In";
-                                            break;
-                            default       : System.out.println("Unexpected response");
-                                            break;
-                        }
-                    }
-                }catch(Exception e) {
-                    message="exception occured";
-                }
-                Toast t=Toast.makeText(LoginActivity.this,message,Toast.LENGTH_LONG);
-                t.show();
-                // reset the email and password field
-                System.out.println(response);
+                String email, password;
+                email = emailET.getText().toString();
+                password = passwordET.getText().toString();
+                displayUserInputs(false);
+                displayWaitingIndicator(true);
+                pV = new ParticipantVerifier(LoginActivity.this);// PrticipantVerifier
+                pV.execute(email,password);
             }
         });
     }

@@ -185,7 +185,7 @@ public class Questions_Activity extends AppCompatActivity {
                         }
                         else {
                             setNextQuestion();
-                            Toast.makeText(Questions_Activity.this,"Valid Code. Next Question set",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Questions_Activity.this,"Valid Code\nNext Question set",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
