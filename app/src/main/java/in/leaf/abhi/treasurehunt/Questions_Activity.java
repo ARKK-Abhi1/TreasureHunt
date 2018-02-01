@@ -41,13 +41,22 @@ public class Questions_Activity extends AppCompatActivity {
     private RandomQGenerator rqg;
     private Chronometer crm;
     private BackgroundThread bgt;
-
+    private int attempt;
 
     private boolean checkEnteredCode() {
+        if(attempt>3) {
+            Toast t=Toast.makeText(this,"You have violated the rules\nHence Disqualified",Toast.LENGTH_LONG);
+            t.show();
+            this.finish();
+            return false;
+        }
         if(enteredCode.equals(questions[qindex].answer)) {
             completed++;
+            attempt=0;
             return true;
         }
+        attempt++;
+        System.out.println("attempt : "+attempt);
         return false;
     }
 
@@ -254,7 +263,7 @@ public class Questions_Activity extends AppCompatActivity {
             progressBar.setProgress((qindex + 1) * 100 / availableQuestions);
             progressView.setText(String.valueOf(qindex+1)+"/"+String.valueOf(availableQuestions));
             codeEntery.setText("");
-            questionView.setText(questions[qindex].question+"   "+questions[qindex].answer);
+            questionView.setText(questions[qindex].question);
         }catch(Exception e) {
             System.out.println("Unable to set next Question");
             if(availableQuestions==0)
